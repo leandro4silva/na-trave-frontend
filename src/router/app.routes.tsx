@@ -7,7 +7,7 @@ export function AppRoutes(){
     return(
         <Routes>
             <Route path="/profile" element={<Profile/>} />
-            <Route path="/" element={<New/ >} />
+            <Route path="/new" element={ <New />} />
         </Routes>
     )
 }

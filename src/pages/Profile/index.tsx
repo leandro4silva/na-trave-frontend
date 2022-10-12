@@ -6,22 +6,10 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 export function Profile(){
 
     const match = {
-        time: "04:00",
-        slugA: "ing",
-        slugB: "ira"
+        gameTime: "04:00",
+        homeTeam: "ing",
+        awayTeam: "ira"
     }
-
-    const match2 = {
-        time: "09:00",
-        slugA: "sen",
-        slugB: "hol"
-    }
-    const match3 = {
-        time: "10:00",
-        slugA: "eua",
-        slugB: "gal"
-    }
-
 
     return(
         <main>
@@ -38,15 +26,8 @@ export function Profile(){
                     </button>
                 </div>
                 <div className="mt-8 flex flex-col gap-4">
-                    <MatchGameCard slugA={match.slugA} slugB={match.slugB} time={match.time} />     
-                    <MatchGameCard slugA={match2.slugA} slugB={match2.slugB} time={match2.time} />       
-                    <MatchGameCard slugA={match3.slugA} slugB={match3.slugB} time={match3.time} /> 
-                    <MatchGameCard slugA={match3.slugA} slugB={match3.slugB} time={match3.time} />       
-                    <MatchGameCard slugA={match3.slugA} slugB={match3.slugB} time={match3.time} />       
-                    <MatchGameCard slugA={match3.slugA} slugB={match3.slugB} time={match3.time} />       
-
+                    <MatchGameCard homeTeam={match.homeTeam} awayTeam={match.awayTeam} gameTime={match.gameTime} isProfile />          
                 </div>
-
             </section>
         </main>
     )
