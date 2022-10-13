@@ -1,7 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { api } from "../services/api";
-import { useNavigate } from "react-router-dom";
-
 
 interface AuthProviderProps {
     children: ReactNode

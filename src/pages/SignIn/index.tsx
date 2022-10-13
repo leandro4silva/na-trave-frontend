@@ -8,7 +8,7 @@ import { Back } from '../../components/Back'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { useAuth } from "../../hooks/auth"
-import { useEffect, useState } from 'react';
+
 
 interface SignInProps{
     email: string,
@@ -21,7 +21,7 @@ const signInSchema = yup.object({
 })
 
 export function SignIn(){
-    const {register, handleSubmit, formState:{errors, isSubmitting, isValidating}} = useForm<SignInProps>({
+    const {register, handleSubmit, formState:{errors, isSubmitting}} = useForm<SignInProps>({
         resolver: yupResolver(signInSchema)
     });
 
@@ -71,7 +71,6 @@ export function SignIn(){
                         type='submit'
                         loading={isSubmitting}
                     />
-    
                 </form>
             </section>
         </main>        

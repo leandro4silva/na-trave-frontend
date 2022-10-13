@@ -4,16 +4,20 @@ import { ptBR } from 'date-fns/locale'
 
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-export function DateSelect() {
+interface DateSelectProps{
+    date: Date,
+    setDate: (date:Date) => void
+}
 
-    const [currentDate, setCurrentDate] = useState(new Date('2022-11-20T00:00:00Z'))
+export function DateSelect(props: DateSelectProps) {
+
 
     function nextDay(){
-        setCurrentDate(prevState => addDays(prevState, 1))
+        props.setDate(addDays(props.date, 1))
     }
 
     function prevDay(){
-        setCurrentDate(prevState => subDays(prevState, 1))
+        props.setDate(subDays(props.date, 1))
     }
 
     return (
@@ -21,7 +25,7 @@ export function DateSelect() {
             <button>
                 <FiChevronLeft size={24} className='text-[#AF053F]' onClick={prevDay}/>
             </button>
-            <h4 className="font-bold leading-6 text-[#300219] text-base">{ format(currentDate, "d 'de' MMMM", {locale: ptBR}) }</h4>
+            <h4 className="font-bold leading-6 text-[#300219] text-base">{ format(props.date, "d 'de' MMMM", {locale: ptBR}) }</h4>
             <button>
                 <FiChevronRight size={24} className='text-[#AF053F]' onClick={nextDay} />
             </button>
