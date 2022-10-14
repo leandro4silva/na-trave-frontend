@@ -47,8 +47,6 @@ export function New() {
         const response = await api.get<GameProps[]>(`/games?gameTime=${formatISO(params)}`);
         return response.data;
     });
-    
-    const username = String(user?.name).charAt(0).toLocaleUpperCase() + String(user?.name).slice(1);
 
     const isLoading = games.loading || hunches.loading
     const hasError = games.error || hunches.error
@@ -64,7 +62,7 @@ export function New() {
 
     return (
         <main>
-            <HeaderDashboard isProfile={false} userName={username} />
+            <HeaderDashboard isProfile={false} name={String(user?.name)} username={String(user?.username)} />
             <section className="md:px-72 px-5 mt-12">
                 <DateSelect date={new Date(currentDate)} setDate={setCurrentDate} />
                 <div className="mt-8 flex flex-col gap-4 mb-20">

@@ -10,12 +10,16 @@ import { Link, useNavigate } from "react-router-dom";
 
 interface HeaderDashboardProps{
     isProfile: boolean,
-    userName: string
+    name?: string,
+    username?: string,
+    logged?: boolean
 }
 
 export function HeaderDashboard(props: HeaderDashboardProps){
     const navigate = useNavigate();
-    const {signOut} = useAuth();
+    const {signOut, user} = useAuth();
+
+    const name = String(props.name).charAt(0).toLocaleUpperCase() + String(props.name).slice(1);
 
     function handleSignOut(){
         signOut();
@@ -33,16 +37,22 @@ export function HeaderDashboard(props: HeaderDashboardProps){
 
                 { props.isProfile 
                     ? 
-                    <button 
-                        className='text-white font-bold flex items-center gap-1'
-                        title='Sair'
-                        type='button'
-                        onClick={handleSignOut}
-                    > 
-                        <RiShutDownLine size={28}/> 
-                    </button>
+
+                        user?
+                            <button 
+                                className='text-white font-bold flex items-center gap-1'
+                                title='Sair'
+                                type='button'
+                                onClick={handleSignOut}
+                            > 
+                                <RiShutDownLine size={28}/> 
+                            </button>
+                        : 
+                        
+                        null
+
                     :
-                    <Link to={"/profile"}>
+                    <Link to={`/${props.username}`}>
                         <TbUserCircle
                             className='text-[#F4F6FF] ' 
                             size={32}
@@ -57,13 +67,17 @@ export function HeaderDashboard(props: HeaderDashboardProps){
                 >{
                 
                     props.isProfile ? 
-                        <button onClick={handleBack}>
-                            <FiArrowLeft size={32}/> 
-                        </button>
-                    : 
-                        `Olá ${props.userName}`}</h3>
 
-                <h2 className={props.isProfile ? 'text-2xl md:text-3xl font-bold text-[#F4F6FF]' :'text-[#F4F6FF] font-bold text-3xl'}>{ props.isProfile ? props.userName : 'Qual é o seu palpite?'}</h2>
+                        user? 
+                            <button onClick={handleBack}>
+                                <FiArrowLeft size={32}/> 
+                            </button>
+                        :
+                        null
+                    : 
+                        `Olá ${name}`}</h3>
+
+                <h2 className={props.isProfile ? 'text-2xl md:text-3xl font-bold text-[#F4F6FF]' :'text-[#F4F6FF] font-bold text-3xl'}>{ props.isProfile ? props.username : 'Qual é o seu palpite?'}</h2>
             </div>
         </header>
     )

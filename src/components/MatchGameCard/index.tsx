@@ -10,24 +10,26 @@ interface MatchGameCardProps{
     awayTeam: string,
     isProfile?: boolean
     homeTeamScore?: number,
-    awayTeamScore?: number
+    awayTeamScore?: number,
+    disabled?: boolean
 }
 
 interface MatchGame{
-    homeTeamScore: string,
-    awayTeamScore: string
+    homeTeamScore: number,
+    awayTeamScore: number
 }
 
 const matchGameSchema = yup.object({
-    homeTeamScore: yup.number().required(),
-    awayTeamScore: yup.number().required()
+    homeTeamScore: yup.string().required(),
+    awayTeamScore: yup.string().required()
 })
 
 export function MatchGameCard(props: MatchGameCardProps){
     const {register, handleSubmit, formState:{errors}} = useForm<MatchGame>({
+        resolver: yupResolver(matchGameSchema),
         defaultValues:{
-            awayTeamScore: String(props.awayTeamScore) || '',
-            homeTeamScore: String(props.homeTeamScore) || '' 
+            awayTeamScore: props.awayTeamScore || undefined,
+            homeTeamScore: props.homeTeamScore || undefined 
         }
     });
 
@@ -37,9 +39,8 @@ export function MatchGameCard(props: MatchGameCardProps){
                 ...data,
                 gameId: props.gameId
             })
-            alert("cadastrado com sucesso!")
         }catch(error: any){
-            alert("Erro inexperado ao criar palpite")
+            alert("Erro inexperado ao criar palpite!")
         }
     }
 
@@ -63,6 +64,7 @@ export function MatchGameCard(props: MatchGameCardProps){
                         type="number"
                         {...register("homeTeamScore")} 
                         onBlur={handleSubmit(handleMatchGame)}
+                        disabled={props.disabled}
                     />
                 </div>
                 <span className='font-bold text-base md:text-base text-[#BB2E57]'>X</span>
@@ -77,6 +79,7 @@ export function MatchGameCard(props: MatchGameCardProps){
                         type="number"
                         {...register("awayTeamScore")}   
                         onBlur={handleSubmit(handleMatchGame)}
+                        disabled={props.disabled}
                     />
                     <img className='w-10 h-10 md:w-14 md:h-14' src={`./img/${props.awayTeam}.png`}  alt={props.awayTeam} />
                     <span className='ml-2 md:ml-4 text-sm md:text-base leading-3 md:leading-6'>{props.awayTeam.toLocaleUpperCase()}</span>

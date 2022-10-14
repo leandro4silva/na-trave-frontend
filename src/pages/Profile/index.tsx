@@ -2,6 +2,7 @@ import { HeaderDashboard } from "../../components/HeaderDashbord"
 import { MatchGameCard } from "../../components/MatchGameCard"
 import { DateSelect } from "../../components/DateSelect";
 
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { formatISO, format } from "date-fns";
 import { useAsyncFn } from "react-use";
@@ -15,29 +16,59 @@ interface GameProps {
     gameTime: string
 }
 
+interface HunchProps{
+    id: string,
+    gameId: string,
+    userId: string,
+    homeTeamScore: number,
+    awayTeamScore: number
+}
+
+interface Hunch{
+    [key: string]: HunchProps,
+}
+
 export function Profile(){
+    const {user} = useAuth();
+    const params = useParams();
     const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 20));
+
+    const [hunches, setHunches] = useAsyncFn(async (params)=> {
+        const response = await api.get<HunchProps[]>(`/hunches/${params}`);
+
+        const hunches = response.data.reduce((acc:Hunch , hunch: HunchProps) => {
+            acc[hunch.gameId] = hunch
+            return acc
+        }, {})
+
+        return hunches
+    });
     
     const [games, setGames] = useAsyncFn(async (params) => {
         const response = await api.get<GameProps[]>(`/games?gameTime=${formatISO(params)}`)
         return response.data
     });
 
-    const { user } = useAuth(); 
-    const username = String(user?.name).charAt(0).toLocaleUpperCase() + String(user?.name).slice(1);
+    const isLoading = games.loading || hunches.loading
+    const hasError = games.error || hunches.error
+    const isDone = !isLoading && !hasError
 
     useEffect(() => {
         setGames(currentDate)
     }, [currentDate])
 
+    useEffect(() => {
+        setHunches(params.username)
+    }, [])
+
     return(
         <main>
-            <HeaderDashboard isProfile userName={username}/>         
+            <HeaderDashboard isProfile username={String(params.username)} />        
             <section className="md:px-72 px-5 mt-12 mb-20">
                 <h4 className="text-[#AF053F] font-bold md:text-3xl text-2xl mb-8">Seus palpites</h4>
                 <DateSelect date={currentDate} setDate={setCurrentDate}/>
                 <div className="mt-8 flex flex-col gap-4">
-                {games.loading &&
+                {isLoading &&
                         <span className=" flex items-center justify-center mt-6">
                             <svg className="fill-[#AF053F]" width="54" height="54" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <g>
@@ -54,18 +85,22 @@ export function Profile(){
                             </svg>
                         </span>
                     }
-                    {games.error && "Ops! Algo deu errado"}
+                    {hasError && "Ops! Algo deu errado"}
                     {
-                        !games.loading && !games.error && 
+                        isDone && 
                         
                             games.value?.map(game =>
+                               
                                 <MatchGameCard
                                     key={game.id}
-                                    isProfile
                                     gameId={game.id}
                                     homeTeam={game.homeTeam}
                                     awayTeam={game.awayTeam}
+                                    homeTeamScore={hunches?.value?.[game.id]?.homeTeamScore}
+                                    awayTeamScore={hunches?.value?.[game.id]?.awayTeamScore}
                                     gameTime={format(new Date(game.gameTime), "HH:mm")}
+                                    isProfile
+                                    disabled
                                 />
                             )
                     }
