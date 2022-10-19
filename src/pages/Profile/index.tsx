@@ -29,7 +29,7 @@ interface Hunch{
 }
 
 export function Profile(){
-    const {user} = useAuth();
+  
     const params = useParams();
     const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 20));
 

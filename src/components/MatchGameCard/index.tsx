@@ -28,8 +28,8 @@ export function MatchGameCard(props: MatchGameCardProps){
     const {register, handleSubmit, formState:{errors}} = useForm<MatchGame>({
         resolver: yupResolver(matchGameSchema),
         defaultValues:{
-            awayTeamScore: props.awayTeamScore || undefined,
-            homeTeamScore: props.homeTeamScore || undefined 
+            awayTeamScore: props.awayTeamScore,
+            homeTeamScore: props.homeTeamScore
         }
     });
 

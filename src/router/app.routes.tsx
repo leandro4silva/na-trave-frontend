@@ -10,8 +10,8 @@ export function AppRoutes(){
     return(
         <Routes>
             <Route path="/" element={ user && <Navigate to={"/new"} /> }></Route>
-            <Route path="/:username" element={<Profile/>} />
             <Route path="/new" element={ <New />} />
+            <Route path="/:username" element={<Profile/>} />
         </Routes>
     )
 }

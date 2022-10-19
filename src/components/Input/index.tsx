@@ -16,7 +16,7 @@ export const Input: React.FC<InputProps> = ({ label, name, register, hasError = 
             className='flex flex-col'
         >
             <label 
-                htmlFor="email" 
+                htmlFor={name} 
                 className='text-[#91949D] font-bold leading-6'
             >
                 {label}
